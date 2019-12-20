@@ -170,11 +170,14 @@ export class OwlCalendarComponent<T>
     @Output()
     readonly monthSelected = new EventEmitter<T>();
 
+    @Output()
+    readonly cancelChange = new EventEmitter<T | null>();
+
     get periodButtonText(): string {
         return this.isMonthView
             ? this.dateTimeAdapter.format(
                   this.pickerMoment,
-                  this.dateTimeFormats.monthYearLabel
+                  { year: "numeric", month: "long" }
               )
             : this.dateTimeAdapter.getYearName(this.pickerMoment);
     }
@@ -340,6 +343,10 @@ export class OwlCalendarComponent<T>
         }*/
     }
 
+    cancel(event: any) {
+        this.cancelChange.emit(event);
+    }
+
     /**
      * Change the pickerMoment value and switch to a specific view
      */
@@ -391,16 +398,16 @@ export class OwlCalendarComponent<T>
      * Focus to the host element
      * */
     public focusActiveCell() {
-        this.ngZone.runOutsideAngular(() => {
-            this.ngZone.onStable
-                .asObservable()
-                .pipe(take(1))
-                .subscribe(() => {
-                    this.elmRef.nativeElement
-                        .querySelector('.owl-dt-calendar-cell-active')
-                        .focus();
-                });
-        });
+        // this.ngZone.runOutsideAngular(() => {
+        //     this.ngZone.onStable
+        //         .asObservable()
+        //         .pipe(take(1))
+        //         .subscribe(() => {
+        //             this.elmRef.nativeElement
+        //                 .querySelector('.owl-dt-calendar-cell-active')
+        //                 .focus();
+        //         });
+        // });
     }
 
     public selectYearInMultiYearView(normalizedYear: T): void {

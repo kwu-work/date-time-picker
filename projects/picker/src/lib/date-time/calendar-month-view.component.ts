@@ -249,6 +249,8 @@ export class OwlMonthViewComponent<T>
 
     private dateNames: string[];
 
+    public selectedDay: number;
+
     /**
      * The date of the month that today falls on.
      * */
@@ -268,6 +270,9 @@ export class OwlMonthViewComponent<T>
      * */
     @Output()
     readonly selectedChange = new EventEmitter<T | null>();
+
+    @Output()
+    readonly cancelChange = new EventEmitter<T | null>();
 
     /**
      * Callback to invoke when any date is selected.
@@ -325,21 +330,27 @@ export class OwlMonthViewComponent<T>
             return;
         }
 
-        this.selectDate(cell.value);
+        this.selectedDay = cell.value;
     }
 
     /**
      * Handle a new date selected
      */
-    private selectDate(date: number): void {
-        const daysDiff = date - 1;
-        const selected = this.dateTimeAdapter.addCalendarDays(
-            this.firstDateOfMonth,
-            daysDiff
-        );
+    selectDate(date: number): void {
+        if (date) {
+            const daysDiff = date - 1;
+            const selected = this.dateTimeAdapter.addCalendarDays(
+                this.firstDateOfMonth,
+                daysDiff
+            );
+    
+            this.selectedChange.emit(selected);
+            this.userSelection.emit();
+        }
+    }
 
-        this.selectedChange.emit(selected);
-        this.userSelection.emit();
+    cancel(event: any) {
+        this.cancelChange.emit(event);
     }
 
     /**
@@ -457,7 +468,7 @@ export class OwlMonthViewComponent<T>
         const firstDayOfWeek = this.firstDayOfWeek;
 
         const weekdays = longWeekdays.map((long, i) => {
-            return { long, short: shortWeekdays[i], narrow: narrowWeekdays[i] };
+            return { long, short: shortWeekdays[i].replace(".", ""), narrow: narrowWeekdays[i] };
         });
 
         this._weekdays = weekdays
@@ -503,6 +514,7 @@ export class OwlMonthViewComponent<T>
                     this.firstDateOfMonth,
                     daysDiff
                 );
+
                 const dateCell = this.createDateCell(date, daysDiff);
 
                 // check if the date is today
@@ -518,10 +530,53 @@ export class OwlMonthViewComponent<T>
                 week.push(dateCell);
                 daysDiff += 1;
             }
-            this._days.push(week);
+
+            // If it's the last week
+            if (i === WEEKS_PER_VIEW - 1) {
+                if (!this.containsDaysFromAnotherMonth(week)) {
+                    this._days.push(week);
+                }
+            }
+            // Go on ahead and add it. Nothing too elaborate
+            else {
+                this.days.push(week);
+            }
         }
 
         this.setSelectedDates();
+    }
+
+    /**
+     * Remove the week if it contains days from another month.
+     */
+    private containsDaysFromAnotherMonth(week: CalendarCell[]) {
+        let overlap: boolean = false; 
+        const firstDayOfWeek = week[0].value;
+        const month = new Date(week[0].ariaLabel).getMonth();
+        const currentMonth = new Date(this.firstDateOfMonth.toString()).getMonth();
+        
+        // Don't hide this date if there's still a few days left
+        if (firstDayOfWeek >= 30 || firstDayOfWeek < 0) {
+            // Check if it's still within the month's crevices
+            if (month === currentMonth) {
+                overlap = false;
+            }
+            else {
+                overlap = true;
+            }
+        }
+        else {
+            for (let i = 1; i < week.length; i++) {
+                const day = new Date(week[i].ariaLabel);
+
+                if (month !== day.getMonth()) {
+                    overlap = false;
+                    break;
+                }
+            }
+        }
+
+        return overlap;
     }
 
     /**

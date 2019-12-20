@@ -50,6 +50,8 @@ export class OwlTimerBoxComponent implements OnInit, OnDestroy {
     @Input() min: number;
 
     @Input() max: number;
+    
+    @Input() maxlength: number = 2;
 
     @Input() step = 1;
 
@@ -75,10 +77,7 @@ export class OwlTimerBoxComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.inputStreamSub = this.inputStream.pipe(
-            debounceTime(500),
-            distinctUntilChanged()
-        ).subscribe(( val: string ) => {
+        this.inputStreamSub = this.inputStream.subscribe(( val: string ) => {
             if (val) {
                 const inputValue = coerceNumberProperty(val, 0);
                 this.updateValueViaInput(inputValue);
@@ -99,7 +98,24 @@ export class OwlTimerBoxComponent implements OnInit, OnDestroy {
     }
 
     public handleInputChange( val: string ): void {
-        this.inputStream.next(val);
+        if (val.length <= this.maxlength) {
+            this.inputStream.next(val);
+        }
+        else {
+            const newValue = val.substr(val.length - this.maxlength);
+
+            if (this.inputLabel === 'Minute') {
+                // Force the UI to display only 2 values
+                const minuteEl: any = document.querySelector(".minute");
+                this.value = parseInt(newValue);
+                minuteEl.value = newValue;
+            }
+            else {
+                this.boxValue = parseInt(newValue);
+            }
+
+            this.inputStream.next(newValue);
+        }
     }
 
     private updateValue( value: number ): void {
@@ -110,6 +126,7 @@ export class OwlTimerBoxComponent implements OnInit, OnDestroy {
         if (value > this.max || value < this.min) {
             return;
         }
+
         this.inputChange.emit(value);
     }
 }

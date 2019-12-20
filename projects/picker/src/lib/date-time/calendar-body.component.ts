@@ -107,7 +107,11 @@ export class OwlCalendarBodyComponent implements OnInit {
     public ngOnInit() {}
 
     public selectCell(cell: CalendarCell): void {
-        this.select.emit(cell);
+        if (cell.enabled && !cell.out) {
+            this.selectedValues = [];
+            this.selectedValues.push(cell.value);
+            this.select.emit(cell);
+        }
     }
 
     public isActiveCell(rowIndex: number, colIndex: number): boolean {

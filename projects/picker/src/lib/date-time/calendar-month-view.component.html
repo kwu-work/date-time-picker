@@ -21,3 +21,11 @@
            (select)="selectCalendarCell($event)">
     </tbody>
 </table>
+<div class="month-buttons">
+    <button class="owl-dt-control-button default cancel" (click) = "cancel($event)">
+        Cancel
+    </button>
+    <button class="owl-dt-control-button primary select" (click) = "selectDate(selectedDay)">
+        Select Date
+    </button>
+</div>

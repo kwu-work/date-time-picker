@@ -239,7 +239,7 @@ export class OwlYearViewComponent<T>
         @Inject(OWL_DATE_TIME_FORMATS)
         private dateTimeFormats: OwlDateTimeFormats
     ) {
-        this.monthNames = this.dateTimeAdapter.getMonthNames('short');
+        this.monthNames = this.dateTimeAdapter.getMonthNames('long');
     }
 
     public ngOnInit() {
