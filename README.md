@@ -1,6 +1,14 @@
 Angular Date Time Picker
 ========================
 
+```
+1. update version in projects/picker/package.json
+2. npm run package
+3. cp projects/picker/.npmrc dist/picker
+4. cd dist/picker
+5. npm publish
+```
+
 [![npm](https://img.shields.io/npm/v/ng-pick-datetime.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/ng-pick-datetime)
 [![npm](https://img.shields.io/npm/dm/ng-pick-datetime.svg)](https://www.npmjs.com/package/ng-pick-datetime)
 
