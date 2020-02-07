@@ -21,7 +21,7 @@
            (select)="selectCalendarCell($event)">
     </tbody>
 </table>
-<div class="month-buttons">
+<div class="month-buttons" *ngIf="showMonth">
     <button class="owl-dt-control-button default cancel" (click) = "cancel($event)">
         Cancel
     </button>

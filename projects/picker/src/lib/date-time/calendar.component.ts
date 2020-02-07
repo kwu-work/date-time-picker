@@ -25,7 +25,6 @@ import {
     OwlDateTimeFormats
 } from './adapter/date-time-format.class';
 import { SelectMode } from './date-time.class';
-import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -142,9 +141,15 @@ export class OwlCalendarComponent<T>
 
     /**
      * Whether to hide dates in other months at the start or end of the current month.
-     * */
+     **/
     @Input()
     hideOtherMonths: boolean;
+
+    /**
+     * If both calendar and timer shown, hide the 'Set Date' buttons
+     **/
+    @Input() 
+    showMonth: boolean;
 
     /** Emits when the currently picker moment changes. */
     @Output()

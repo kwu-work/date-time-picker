@@ -1,6 +1,21 @@
-<label for="daterange">Datetime range (click, then press 'Set' to modify):</label>
-<input [(ngModel)]="selectedMoments" [selectMode]="'range'"
+<label for="daterange">Date range (click, then press 'Set' to modify):</label>
+<input
        [owlDateTimeTrigger]="date_range_component" [owlDateTime]="date_range_component"
        style="width: 100%; color: cornflowerblue"
        id="daterange" matInput>
-<owl-date-time #date_range_component></owl-date-time>
+<owl-date-time #date_range_component [pickerType]="'calendar'"></owl-date-time>
+
+<label for="timerange">Time range (click, then press 'Set' to modify):</label>
+<input
+       [owlDateTimeTrigger]="time_component" [owlDateTime]="time_component"
+       style="width: 100%; color: cornflowerblue"
+       id="timerange" matInput>
+<owl-date-time #time_component [pickerType]="'timer'" [hour12Timer]="true"></owl-date-time>
+
+<label for="both">Both: </label>
+<input
+       [owlDateTimeTrigger]="both_componnet" [owlDateTime]="both_componnet"
+       style="width: 100%; color: cornflowerblue" 
+       id="both" matInput>
+<owl-date-time #both_componnet [pickerType]="'both'"></owl-date-time>
+

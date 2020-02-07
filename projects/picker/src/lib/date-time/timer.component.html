@@ -31,6 +31,6 @@
         (valueChange)="setSecondValue($event)"></owl-date-time-timer-box> -->
 
 <div *ngIf="hour12Timer" class="owl-dt-timer-hour12">
-        <div class="owl-dt-timer-ampm-trigger" [ngStyle]="{ 'color': !isPM ? 'black' : 'gray' }" (click)="isPM = false; setMeridiem($event)">AM</div>
-        <div class="owl-dt-timer-ampm-trigger" [ngStyle]="{ 'color': isPM ? 'black' : 'gray' }" (click)="isPM = true; setMeridiem($event)">PM</div>
+        <div class="owl-dt-timer-ampm-trigger" [ngStyle]="{ 'color': !isPM ? 'black' : 'gray' }" (click)="isPM = false; setMeridiem($event)">am</div>
+        <div class="owl-dt-timer-ampm-trigger" [ngStyle]="{ 'color': isPM ? 'black' : 'gray' }" (click)="isPM = true; setMeridiem($event)">pm</div>
 </div>
