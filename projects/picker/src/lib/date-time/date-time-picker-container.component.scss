@@ -1,0 +1,7 @@
+@media only screen and (max-height: 400px) {
+    :host {
+        height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}

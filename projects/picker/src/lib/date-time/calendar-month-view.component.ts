@@ -241,6 +241,12 @@ export class OwlMonthViewComponent<T>
         );
     }
 
+    /**
+     * Boolean flag for hiding 'Set Date' / 'Cancel' duo 
+     **/
+    @Input()
+    showMonth: boolean;
+
     private firstDateOfMonth: T;
 
     private localeSub: Subscription = Subscription.EMPTY;
@@ -337,15 +343,25 @@ export class OwlMonthViewComponent<T>
      * Handle a new date selected
      */
     selectDate(date: number): void {
+        let selected;
+
         if (date) {
             const daysDiff = date - 1;
-            const selected = this.dateTimeAdapter.addCalendarDays(
+            selected = this.dateTimeAdapter.addCalendarDays(
                 this.firstDateOfMonth,
                 daysDiff
             );
     
             this.selectedChange.emit(selected);
             this.userSelection.emit();
+        }
+        else {
+            // Set to today's date
+            selected = this.dateTimeAdapter.addCalendarDays(
+                this.firstDateOfMonth,
+                new Date().getDate() - 1
+            );
+            this.selectedChange.emit(selected);
         }
     }
 
